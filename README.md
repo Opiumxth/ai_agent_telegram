@@ -104,16 +104,3 @@ AI_Agent_Basic/
 - [x] El token de Telegram y keys nunca están en el código fuente
 - [!] Nunca compartas tu `.env` ni tu token de Telegram
 
----
-
-## Próximos pasos — Nivel Intermedio
-
-Ver `../AI_Agent_Intermediate/` para una versión con:
-- RAG (busca en documentos propios)
-- Tool calling (funciones externas)
-- Persistencia de memoria en base de datos
-- Webhooks para producción
-
----
-
-*IEEE Computer Society PUCP — Curso de Agentes de IA*
