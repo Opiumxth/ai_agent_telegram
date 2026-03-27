@@ -1,0 +1,39 @@
+Resumen Técnico: NVIDIA Nemotron 3 (Efficient and Open Intelligence)
+===================================================================
+
+[1] Introducción y Arquitectura (Familia Nano, Super, Ultra)
+-----------------------------------------------------------
+- Rendimiento y Capacidades: La familia Nemotron 3 está diseñada con fuertes capacidades de agente, razonamiento, y conversación.
+- Eficiencia en Inferencia: Adoptan una arquitectura híbrida MoE (Mixture-of-Experts) intercalando Mamba-2 y módulos de Atención. Mamba-2 reduce la necesidad de un KV Cache que crece linealmente, habilitando mejor "throughput" (hasta 3.3x mayor vs otros MoE) sin perder precisión.
+- Contexto Extenso: Soportan hasta 1,000,000 (1M) de tokens de contexto, vital para automatizaciones RAG extensas, código de repositorios completos y largos historiales.
+
+[2] LatentMoE (Innovación para Mayor Precisión)
+-----------------------------------------------
+Típicamente un MoE sufre cuellos de botella de memoria o de comunicación. Nemotron 3 Super y Ultra usan "LatentMoE":
+- Los tokens se proyectan a una dimensión latente menor antes de enrutarlos a los expertos.
+- Esto reduce el tráfico y la transferencia de datos (aprox 4x menos).
+- Esos ahorros se reinvierten en aumentar dramáticamente la cantidad total de expertos (ej. de 128 a 512) y expertos activos (ej. de 6 a 22), mejorando la precisión y la calidad "por byte" de computación, manteniendo costo de iteración constante.
+
+[3] Multi-Token Prediction (MTP)
+--------------------------------
+- Nemotron 3 predecirá múltiples tokens futuros al mismo tiempo.
+- Esto mejora la señal de entrenamiento obligando a la IA a "planear adelante".
+- En tiempo de inferencia esto acelera masivamente la respuesta (generación de texto) gracias a una descodificación especulativa nativa altamente efectiva.
+- Trae mejoras (aprox 2.4%) en razonamiento matemático, entendimiento y codificación frente a no usar MTP.
+
+[4] Entrenamiento con NVFP4
+---------------------------
+- Los modelos Super y Ultra (y Nano en experimentación) están entrenados usando cuantización de FP4 (NVFP4 native GEMMs) en lugar de BF16 en su inmensa mayoría de capas.
+- Esto acelera el proceso x3 frente a FP8.
+- Para mantener la estabilidad, mantienen las capas de Atención (QKV) y proyección de Mamba en MXFP8 o BF16.
+- Demostraron que la diferencia de pérdida de aprendizaje (loss gap) entre NVFP4 y alta precisión es minúscula (< 0.6% en modelos grandes) sin impacto negativo medible en los Benchmarks finales.
+
+[5] Alineamiento y Reinforcement Learning (RL)
+----------------------------------------------
+- Se usa RL multi-entorno: El modelo no se entrena en etapas (ej. primero mate, luego código), sino que de forma "simultánea" se optimiza en código competitivo, chat, matemáticas, uso de herramientas (agentic) y contextos largos.
+- GRPO (Group Relative Policy Optimization) asegura un aprendizaje asíncrono y estable.
+
+[6] Granular Reasoning Budget (Control de Presupuesto)
+------------------------------------------------------
+- El modelo expone el flag `enable_thinking`. 
+- Además, permite a los desarrolladores limitar la cantidad estricta de "tokens de pensamiento" que el LLM puede gastar en su razonamiento interno antes de responder (usando el token `</think>`), balanceando así costo/latencia vs precisión del resultado a voluntad.

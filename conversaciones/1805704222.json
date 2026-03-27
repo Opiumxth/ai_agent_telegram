@@ -1,0 +1,18 @@
+[
+  {
+    "role": "user",
+    "content": "hola, estas ahi?"
+  },
+  {
+    "role": "assistant",
+    "content": "¡Hola! Sí, estoy aquí. ¿En qué puedo ayudarte?"
+  },
+  {
+    "role": "user",
+    "content": "Vale, pensé que no responderias, como vas? que puedes hacer"
+  },
+  {
+    "role": "assistant",
+    "content": "¡Hola! Estoy aquí y listo para ayudar. Puedo responder preguntas, asistir con dudas sobre tecnología e inteligencia artificial, y mantener conversaciones interesantes. Formo parte del curso educativo sobre Agentes de IA de IEEE CS PUCP, así que si tienes alguna duda relacionada con eso o otros temas tecnológicos, estaré encantado de asistirte. ¿En qué puedo ayudarte hoy?"
+  }
+]
